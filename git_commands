@@ -7,8 +7,6 @@ git add .
 # Commits the tracked changes and prepares them to be pushed to a remote repository. 
 git commit -m "First commit"
 
-
-
 git remote add origin remote repository URL
 # Sets the new remote
 git remote -v

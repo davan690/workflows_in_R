@@ -1,0 +1,33 @@
+---
+title: "Workflows in R"
+author: "Rob Chavez"
+date: "5/8/2019"
+output: 
+  html_document: 
+    theme: cerulean
+    toc: yes
+    toc_float: yes
+---
+
+In this section, we are going to be discussing some general "workflows" that you may find helpful in organizing your research. Here we will discuss a few topics, including:
+
+* RStudio Projects
+* Common issues
+* Working file structure i/o
+* Git/GitHub
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# RStudio Project
+
+Projects are a great way to organize your workflow. When you create a project, it is saved within a directory (either new or existing) that helps organize related files and scripts. Opening a project sets the working directory to that designated space, making it easier to share project directories with others. There’s additional added benefits:
+
+* you don't have to set the working directory
+* you can set preferences for that environment
+* saving history specific to that project
+* auto-saves within project directory
