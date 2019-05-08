@@ -4,7 +4,8 @@ author: "Rob Chavez"
 date: "5/8/2019"
 output: 
   html_document: 
-    theme: cerulean
+    highlight: tango
+    theme: flatly
     toc: yes
     toc_float: yes
 ---
@@ -12,10 +13,8 @@ output:
 In this section, we are going to be discussing some general "workflows" that you may find helpful in organizing your research. Here we will discuss a few topics, including:
 
 * RStudio Projects
-* Common issues
-* Working file structure i/o
+* Working file structure and data input/output
 * Git/GitHub
-
 
 
 
@@ -31,3 +30,41 @@ Projects are a great way to organize your workflow. When you create a project, i
 * you can set preferences for that environment
 * saving history specific to that project
 * auto-saves within project directory
+
+## Starting fresh
+When working with data, in your code you must set the directory paths in order to access data and save data, scripts, and documentation. 
+
+This can be done with the `setwd()` command and a typical script might begin looing something like this:
+
+```{r setwd, eval=FALSE}
+library(tidyverse)
+
+# set directory
+setwd("~/Google Drive/Teaching/PSY_607_data_science/2019s/mycode/")
+
+# clear global environment
+rm(list = ls())
+
+```
+
+However, there two problems here. 
+
+1. The `setwd()` is idiosyncratic to my computer and not helpful to other sharing in on the project. 
+2. The `rm(list = ls())` is considered bad form and may not actually do what you want it to.
+
+(See [here](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/) for detailed discussion.)
+
+## Create a new project
+Instead let's start with a project. 
+
+
+![](https://d33wubrfki0l68.cloudfront.net/87562c4851bf4d0b0c8415dc9d6690493572e362/a6685/screenshots/rstudio-project-1.png)
+
+![](https://d33wubrfki0l68.cloudfront.net/0fa791e2621be297cb9c5cac0b2802223e3d7714/57d89/screenshots/rstudio-project-2.png)
+![](https://d33wubrfki0l68.cloudfront.net/dee6324df1f5c5121d1c1e9eed822ee52c87167b/1f325/screenshots/rstudio-project-3.png)
+
+Using a project will set all analyses and code with the working directory as the project directory. This makes it easy to keep everything together and access your code and data. 
+
+
+
+
