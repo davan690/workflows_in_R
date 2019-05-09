@@ -13,7 +13,7 @@ output:
 In this section, we are going to be discussing some general "workflows" that you may find helpful in organizing your research. Here we will discuss a few topics, including:
 
 * RStudio Projects
-* Working file structure and data input/output
+* Working with file structures,data input/output, and scripts
 * Git/GitHub
 
 
@@ -63,7 +63,61 @@ Instead let's start with a project.
 ![](https://d33wubrfki0l68.cloudfront.net/0fa791e2621be297cb9c5cac0b2802223e3d7714/57d89/screenshots/rstudio-project-2.png)
 ![](https://d33wubrfki0l68.cloudfront.net/dee6324df1f5c5121d1c1e9eed822ee52c87167b/1f325/screenshots/rstudio-project-3.png)
 
-Using a project will set all analyses and code with the working directory as the project directory. This makes it easy to keep everything together and access your code and data. 
+Using a project will set all analyses and code with the working directory as the project directory. This makes it easy to keep everything together and access your code and data. Moreover, it will make analyses easy for sharing because you can use **relative paths** seamlessly. This helps when sharing across opperating systems too. From here, you can add all kinds of things to your projects that RStudio can interface with including:
+
+* Rmarkdown docs
+* R scripts
+* text files
+* Python scripts
+* much more!
+
+
+**Let's go through an example of how to do this**
+
+* Create a new project
+* Save a script
+
+# System I/O and data workflows
+
+Often it is helpful to manage all of your data within R itself programmatically and have a record of what you have done. Here are a few pointers for dealing with file structures,data input/output, and scripts.
+
+## Combining individual subject's data
+In Psychology, each subject's data is often stored in its own directory. However, it might be desired to load each subject data into the environment one by one for some analyses. There are a variety of helpful functions for writing and navigating directories in R, including:
+
+* `list.files()` or `dir()` -- makes character vector of file names
+* `dir.exists()`  -- logical asking if the directory exists (helpful for not writing over things)
+* `dir.create()`  -- creates directory
+* `file.remove()` -- be careful! It doesn't give warnings.
+* several other `file.*` commands for interacting with the OS for dealing with files
+
+### load individual subject's data
+In the example below, we have three subjects each with two runs of data. Here we want to look to see if the the conditions were in the same order across subjects for *run1* only. 
+
+```{r}
+library(tidyverse)
+
+# create list of subject names
+subjects <- list.files("emo_study")
+print(subjects)
+
+# define relative paths for loop
+study_dir <- "emo_study/"
+
+# create loop to load subject's data into Global environment
+for(sub in subjects){
+    data_file <-  list.files(paste0(study_dir, sub), pattern = "run1.csv") # finds the .csv for each subject
+    path_tmp <- paste0(study_dir, sub, "/", data_file) # create path to load
+    df_tmp <- read_csv(path_tmp)  # reads .csv
+    assign(paste0(sub,"_df"), df_tmp) # renames in the Global environment
+}
+
+head(sub001_df, 3)
+head(sub002_df, 3)
+```
+
+
+
+
 
 
 

@@ -3,5 +3,5 @@ Because it is a markdown document you can:
 
 * do all of the nice markdown stuff you like
 * such as making bullet list
-* *text higlighting*
+* *text highlighting*
 * and [links](http://lmgtfy.com/?q=markdown+cheat+sheet)

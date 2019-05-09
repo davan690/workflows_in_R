@@ -1,3 +1,5 @@
+#This is just a text document saving the git commands that I used to link this project to github.
+
 git init
 
 # Adds the files in the local repository and stages them for commit.
