@@ -72,10 +72,29 @@ Using a project will set all analyses and code with the working directory as the
 * much more!
 
 
+## sourcing custom functions
+We have writen custom functions before and often they are very useful in practice. However, they can clutter up an analysis notebook. Instead of defining them within the analysis itself, you can define them in their own R script then load (AKA "source") them from a separate file when you need them using `source()`. Here is an exmple from the current project.
+
+```{r}
+# load and define custom functions from separate R script
+source("custom_functions.R")
+
+# create random numbers
+numbers <- c(2,4,7,3,6,4,5)
+
+# use functions
+mean_rob(numbers)
+se_rob(numbers)
+
+```
+
+
+
 **Let's go through an example of how to do this**
 
 * Create a new project
 * Save a script
+
 
 # System I/O and data workflows
 
@@ -93,7 +112,7 @@ In Psychology, each subject's data is often stored in its own directory. However
 ### load individual subject's data
 In the example below, we have three subjects each with two runs of data. Here we want to look to see if the the conditions were in the same order across subjects for *run1* only. 
 
-```{r}
+```{r , warning=FALSE, message=FALSE}
 library(tidyverse)
 
 # create list of subject names
@@ -113,12 +132,73 @@ for(sub in subjects){
 
 head(sub001_df, 3)
 head(sub002_df, 3)
+head(sub003_df, 3)
+```
+
+Let's do it again but get all of the files in the directory except for the 'log' file
+```{r warning=FALSE, message=FALSE}
+# create list of subject names
+subjects <- list.files("emo_study")
+
+# define relative paths for loop
+study_dir <- "emo_study/"
+
+# create loop to load subject's data into Global environment
+for(sub in subjects){
+    data_file <-  list.files(paste0(study_dir, sub), pattern = "*.csv") # finds both .csv files for each subject
+    path_tmp <- paste0(study_dir, sub, "/", data_file) # create path to load
+    
+    # loop over runs
+    for(run in path_tmp){
+    df_tmp <- read_csv(run)  # reads .csv
+    label <- str_sub(run,18, -5 ) # splits string to keep the run number only
+    assign(paste0(sub,"_", label, "_df"), df_tmp) # renames in the Global environment
+    }
+}
+
+head(sub001_run1_df,3)
+head(sub001_run2_df,3)
+```
+
+### combine individual subjects data into one data frame
+If your subject's data all of the same variable names, it is simple to combine them all into a single file that you can wrangle for various analyses. This can save tons of times and lines of code.
+
+For example:
+```{r warning=FALSE, message=FALSE}
+# create list of subject names
+subjects <- list.files("emo_study")
+
+# define relative paths for loop
+study_dir <- "emo_study/"
+
+# loop over subjects/runs to load data into a single data frame
+
+df <- data.frame()  # define empty data frame
+
+for(sub in subjects){
+    data_file <-  list.files(paste0(study_dir, sub), pattern = "*.csv") # finds both .csv files for each subject
+    path_tmp <- paste0(study_dir, sub, "/", data_file) # create path to load
+    
+    # loop over runs
+    for(run in path_tmp){
+    df_tmp <- read_csv(run)  # reads .csv
+    df <- rbind(df,df_tmp)
+    }
+}
+
+# summarise response by condition per subject, averaging across runs
+df %>% 
+  group_by(ID, condition) %>% 
+  summarise(mean_condition = mean(response))
 ```
 
 
 
+# Git & GitHub
 
+Git is an extremely open source version control system. GitHub is the most popular of several cloud-based hosting service for Git repositories (GitLab and BitBucket are others). 
 
+There are several different ways to incorporate Git/Github into your workflow. Here I am going to show you how to do most of it through RStudio.
 
 
 
